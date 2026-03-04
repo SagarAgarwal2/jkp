@@ -90,17 +90,16 @@
   .section-content ul { margin-left: 1.5rem; color: var(--muted); line-height: 1.9; }
   .section-content ul li { margin-bottom: 0.8rem; }
   
-  .screenshots { display: grid; gap: 2rem; }
-  .screenshot-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px var(--shadow); }
+  .screenshots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .screenshot-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; box-shadow: 0 2px 12px var(--shadow); }
   .screenshot-placeholder {
     aspect-ratio: 9/16; background: var(--bg2);
-    border: 2px dashed var(--border); border-radius: 8px;
+    border: 2px dashed var(--border); border-radius: 6px;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Fira Code', monospace; font-size: 0.85rem;
-    color: var(--muted); margin-bottom: 1rem; max-width: 320px;
-    margin-left: auto; margin-right: auto;
+    font-family: 'Fira Code', monospace; font-size: 0.75rem;
+    color: var(--muted); margin-bottom: 0.7rem;
   }
-  .screenshot-caption { font-size: 0.85rem; color: var(--muted); text-align: center; }
+  .screenshot-caption { font-size: 0.8rem; color: var(--muted); text-align: center; }
   
   .cta-section { text-align: center; padding: 3rem 2rem; background: var(--bg2); border-radius: 12px; margin-top: 4rem; }
   .btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; border-radius: 6px; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.25s; }
@@ -111,6 +110,7 @@
     nav { padding: 1rem 1.5rem; }
     .theme-toggle { right: 1.5rem; }
     .container { padding: 6rem 1.5rem 3rem; }
+    .screenshots { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -200,18 +200,13 @@
       </div>
       
       <div class="screenshot-item">
-        <div class="screenshot-placeholder">📍 Screenshot 4: Location Tracking</div>
-        <p class="screenshot-caption">Real-time map with location sharing</p>
+        <img src="assests/WhatsApp Image 2026-02-06 at 13.18.52.jpg" alt="SaviHer Team at Event" style="width: 100%; border-radius: 6px; margin-bottom: 0.7rem; object-fit: cover;">
+        <p class="screenshot-caption">SaviHer team showcasing the app at iStart Rajasthan event</p>
       </div>
       
       <div class="screenshot-item">
-        <div class="screenshot-placeholder">⚙️ Screenshot 5: Settings & Preferences</div>
-        <p class="screenshot-caption">Customizable safety features and alert settings</p>
-      </div>
-      
-      <div class="screenshot-item">
-        <div class="screenshot-placeholder">📞 Screenshot 6: Fake Call Screen</div>
-        <p class="screenshot-caption">Realistic fake incoming call interface</p>
+        <img src="assests/WhatsApp Image 2026-02-06 at 13.14.49.jpg" alt="Safety Map Geofencing" style="width: 100%; border-radius: 6px; margin-bottom: 0.7rem; object-fit: cover;">
+        <p class="screenshot-caption">Real-time safety map with geofencing and nearby hospitals</p>
       </div>
     </div>
   </div>
