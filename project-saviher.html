@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SaviHer — Safety App — Sagar Agarwal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --bg2: #eeece6;
+    --surface: #fafaf8;
+    --border: #dddad2;
+    --accent: #1d4ed8;
+    --accent2: #b91c1c;
+    --accent3: #15803d;
+    --text: #18181b;
+    --muted: #71717a;
+    --card: #ffffff;
+    --shadow: rgba(0,0,0,0.06);
+  }
+  [data-theme="dark"] {
+    --bg: #0e0e0c;
+    --bg2: #141410;
+    --surface: #1a1a16;
+    --border: #2c2c26;
+    --accent: #6b9cfa;
+    --accent2: #f87171;
+    --accent3: #4ade80;
+    --text: #f0ede4;
+    --muted: #888278;
+    --card: #161614;
+    --shadow: rgba(0,0,0,0.5);
+  }
+  
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; transition: background 0.4s ease, color 0.4s ease; }
+  
+  .theme-toggle {
+    position: fixed; top: 1.3rem; right: 4rem; z-index: 200;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 100px; width: 56px; height: 28px;
+    cursor: pointer; display: flex; align-items: center; padding: 3px;
+    transition: background 0.3s, border 0.3s; box-shadow: 0 1px 4px var(--shadow);
+  }
+  .toggle-knob {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease; display: flex;
+    align-items: center; justify-content: center; font-size: 0.72rem;
+  }
+  [data-theme="dark"] .toggle-knob { transform: translateX(28px); }
+  
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem; backdrop-filter: blur(18px);
+    background: rgba(246,245,241,0.85);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.4s, border 0.4s;
+  }
+  [data-theme="dark"] nav { background: rgba(14,14,12,0.85); }
+  .nav-back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--muted); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.2s; }
+  .nav-back:hover { color: var(--text); gap: 0.7rem; }
+  
+  .container { max-width: 1000px; margin: 0 auto; padding: 8rem 2rem 4rem; }
+  
+  .project-header { margin-bottom: 4rem; }
+  .project-category { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+  .project-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1.5rem; }
+  .project-subtitle { color: var(--muted); font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin-bottom: 2rem; }
+  
+  .project-meta { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 2rem; }
+  .metric { font-size: 0.72rem; font-weight: 600; padding: 0.4rem 1rem; border-radius: 100px; }
+  .metric-red { background: rgba(185,28,28,0.08); color: #b91c1c; border: 1px solid rgba(185,28,28,0.2); }
+  .metric-green { background: rgba(21,128,61,0.08); color: #15803d; border: 1px solid rgba(21,128,61,0.2); }
+  .metric-blue { background: rgba(29,78,216,0.08); color: #1d4ed8; border: 1px solid rgba(29,78,216,0.2); }
+  [data-theme="dark"] .metric-red { background: rgba(248,113,113,0.1); color: #f87171; border-color: rgba(248,113,113,0.2); }
+  [data-theme="dark"] .metric-green { background: rgba(74,222,128,0.1); color: #4ade80; border-color: rgba(74,222,128,0.2); }
+  [data-theme="dark"] .metric-blue { background: rgba(107,156,250,0.1); color: #6b9cfa; border-color: rgba(107,156,250,0.2); }
+  
+  .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag { font-size: 0.75rem; font-family: 'Fira Code', monospace; padding: 0.3rem 0.8rem; border-radius: 4px; background: var(--bg2); border: 1px solid var(--border); color: var(--muted); }
+  
+  .section { margin-bottom: 4rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.8rem; margin-bottom: 1.5rem; }
+  .section-content p { color: var(--muted); line-height: 1.9; font-size: 0.95rem; margin-bottom: 1.2rem; }
+  .section-content strong { color: var(--text); font-weight: 600; }
+  .section-content ul { margin-left: 1.5rem; color: var(--muted); line-height: 1.9; }
+  .section-content ul li { margin-bottom: 0.8rem; }
+  
+  .screenshots { display: grid; gap: 2rem; }
+  .screenshot-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px var(--shadow); }
+  .screenshot-placeholder {
+    aspect-ratio: 9/16; background: var(--bg2);
+    border: 2px dashed var(--border); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fira Code', monospace; font-size: 0.85rem;
+    color: var(--muted); margin-bottom: 1rem; max-width: 320px;
+    margin-left: auto; margin-right: auto;
+  }
+  .screenshot-caption { font-size: 0.85rem; color: var(--muted); text-align: center; }
+  
+  .cta-section { text-align: center; padding: 3rem 2rem; background: var(--bg2); border-radius: 12px; margin-top: 4rem; }
+  .btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; border-radius: 6px; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.25s; }
+  .btn-primary { background: var(--text); color: var(--bg); box-shadow: 0 4px 20px var(--shadow); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--shadow); }
+  
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .theme-toggle { right: 1.5rem; }
+    .container { padding: 6rem 1.5rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+  <div class="toggle-knob" id="toggleKnob">☀️</div>
+</button>
+
+<nav>
+  <a href="main.html" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="container">
+  <div class="project-header">
+    <div class="project-category">03 / Mobile · Safety</div>
+    <h1 class="project-title">SaviHer — Safety App</h1>
+    <p class="project-subtitle">Women's safety app with lightning-fast SOS alerts that capture real-time images and notify emergency contacts in 2.5 seconds. Incubated at Bhamasha Techno Hub.</p>
+    
+    <div class="project-meta">
+      <span class="metric metric-red">2.5s SOS response</span>
+      <span class="metric metric-green">70% faster help</span>
+      <span class="metric metric-blue">Incubated</span>
+    </div>
+    
+    <div class="tech-stack">
+      <span class="tag">Flutter</span>
+      <span class="tag">Dart</span>
+      <span class="tag">Firebase</span>
+      <span class="tag">GCP</span>
+      <span class="tag">Twilio</span>
+      <span class="tag">Location Services</span>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Project Overview</h2>
+    <div class="section-content">
+      <p>As <strong>Founder & Developer</strong> of SaviHer, I built a comprehensive women's safety application that prioritizes speed and reliability in emergency situations. The app achieves a remarkable <strong>2.5-second response time</strong> from SOS trigger to emergency contact notification, making it <strong>70% faster</strong> than traditional emergency alert systems.</p>
+      
+      <p>SaviHer has been <strong>incubated at Bhamasha Techno Hub</strong> and is currently in the process of applying for <strong>iSTART state funding</strong>, recognizing its potential impact on women's safety across India.</p>
+      
+      <p>The app leverages multiple technologies to ensure maximum reliability:</p>
+      <ul>
+        <li><strong>Flutter/Dart:</strong> Cross-platform mobile development for iOS and Android</li>
+        <li><strong>Firebase:</strong> Real-time database and cloud storage for instant data sync</li>
+        <li><strong>GCP:</strong> Image processing and machine learning capabilities</li>
+        <li><strong>Twilio:</strong> SMS and voice call integration for emergency notifications</li>
+        <li><strong>Location Services:</strong> Real-time GPS tracking with offline capabilities</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Key Features</h2>
+    <div class="section-content">
+      <ul>
+        <li><strong>Instant SOS Alert:</strong> One-tap emergency button with 2.5-second response time</li>
+        <li><strong>Live Image Capture:</strong> Automatically captures and uploads photos to cloud storage</li>
+        <li><strong>Real-time Location Tracking:</strong> Continuous GPS tracking shared with emergency contacts</li>
+        <li><strong>Multi-channel Notifications:</strong> SMS, push notifications, and automated voice calls</li>
+        <li><strong>Offline Mode:</strong> Core features work without internet connectivity</li>
+        <li><strong>Trusted Circle:</strong> Manage up to 10 emergency contacts with priority levels</li>
+        <li><strong>Fake Call Feature:</strong> Simulate incoming calls to exit uncomfortable situations</li>
+        <li><strong>Safe Zone Alerts:</strong> Geofencing notifications when entering/leaving designated areas</li>
+        <li><strong>Audio Recording:</strong> Background audio recording during emergencies</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Screenshots</h2>
+    <div class="screenshots">
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">📱 Screenshot 1: Home Screen</div>
+        <p class="screenshot-caption">Main dashboard with prominent SOS button</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">🆘 Screenshot 2: SOS Activation</div>
+        <p class="screenshot-caption">Emergency mode with real-time status updates</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">👥 Screenshot 3: Emergency Contacts</div>
+        <p class="screenshot-caption">Trusted circle management interface</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">📍 Screenshot 4: Location Tracking</div>
+        <p class="screenshot-caption">Real-time map with location sharing</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">⚙️ Screenshot 5: Settings & Preferences</div>
+        <p class="screenshot-caption">Customizable safety features and alert settings</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">📞 Screenshot 6: Fake Call Screen</div>
+        <p class="screenshot-caption">Realistic fake incoming call interface</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="cta-section">
+    <a href="https://github.com/SagarAgarwal2" target="_blank" class="btn btn-primary">View Code on GitHub →</a>
+  </div>
+</div>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  const knob = document.getElementById('toggleKnob');
+  const html = document.documentElement;
+  
+  const saved = localStorage.getItem('sa-theme') || 'light';
+  html.setAttribute('data-theme', saved);
+  knob.textContent = saved === 'dark' ? '🌙' : '☀️';
+  
+  toggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    knob.textContent = next === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('sa-theme', next);
+  });
+</script>
+</body>
+</html>

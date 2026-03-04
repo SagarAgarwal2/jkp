@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Solar-Chain — Sagar Agarwal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --bg2: #eeece6;
+    --surface: #fafaf8;
+    --border: #dddad2;
+    --accent: #1d4ed8;
+    --accent2: #b91c1c;
+    --accent3: #15803d;
+    --text: #18181b;
+    --muted: #71717a;
+    --card: #ffffff;
+    --shadow: rgba(0,0,0,0.06);
+  }
+  [data-theme="dark"] {
+    --bg: #0e0e0c;
+    --bg2: #141410;
+    --surface: #1a1a16;
+    --border: #2c2c26;
+    --accent: #6b9cfa;
+    --accent2: #f87171;
+    --accent3: #4ade80;
+    --text: #f0ede4;
+    --muted: #888278;
+    --card: #161614;
+    --shadow: rgba(0,0,0,0.5);
+  }
+  
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; transition: background 0.4s ease, color 0.4s ease; }
+  
+  .theme-toggle {
+    position: fixed; top: 1.3rem; right: 4rem; z-index: 200;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 100px; width: 56px; height: 28px;
+    cursor: pointer; display: flex; align-items: center; padding: 3px;
+    transition: background 0.3s, border 0.3s; box-shadow: 0 1px 4px var(--shadow);
+  }
+  .toggle-knob {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease; display: flex;
+    align-items: center; justify-content: center; font-size: 0.72rem;
+  }
+  [data-theme="dark"] .toggle-knob { transform: translateX(28px); }
+  
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem; backdrop-filter: blur(18px);
+    background: rgba(246,245,241,0.85);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.4s, border 0.4s;
+  }
+  [data-theme="dark"] nav { background: rgba(14,14,12,0.85); }
+  .nav-back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--muted); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.2s; }
+  .nav-back:hover { color: var(--text); gap: 0.7rem; }
+  
+  .container { max-width: 1000px; margin: 0 auto; padding: 8rem 2rem 4rem; }
+  
+  .project-header { margin-bottom: 4rem; }
+  .project-category { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+  .project-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1.5rem; }
+  .project-subtitle { color: var(--muted); font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin-bottom: 2rem; }
+  
+  .project-meta { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 2rem; }
+  .metric { font-size: 0.72rem; font-weight: 600; padding: 0.4rem 1rem; border-radius: 100px; }
+  .metric-gold { background: rgba(161,98,7,0.08); color: #a16207; border: 1px solid rgba(161,98,7,0.2); }
+  .metric-green { background: rgba(21,128,61,0.08); color: #15803d; border: 1px solid rgba(21,128,61,0.2); }
+  .metric-blue { background: rgba(29,78,216,0.08); color: #1d4ed8; border: 1px solid rgba(29,78,216,0.2); }
+  [data-theme="dark"] .metric-gold { background: rgba(253,224,71,0.1); color: #fbbf24; border-color: rgba(253,224,71,0.2); }
+  [data-theme="dark"] .metric-green { background: rgba(74,222,128,0.1); color: #4ade80; border-color: rgba(74,222,128,0.2); }
+  [data-theme="dark"] .metric-blue { background: rgba(107,156,250,0.1); color: #6b9cfa; border-color: rgba(107,156,250,0.2); }
+  
+  .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag { font-size: 0.75rem; font-family: 'Fira Code', monospace; padding: 0.3rem 0.8rem; border-radius: 4px; background: var(--bg2); border: 1px solid var(--border); color: var(--muted); }
+  
+  .section { margin-bottom: 4rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.8rem; margin-bottom: 1.5rem; }
+  .section-content p { color: var(--muted); line-height: 1.9; font-size: 0.95rem; margin-bottom: 1.2rem; }
+  .section-content strong { color: var(--text); font-weight: 600; }
+  .section-content ul { margin-left: 1.5rem; color: var(--muted); line-height: 1.9; }
+  .section-content ul li { margin-bottom: 0.8rem; }
+  
+  .screenshots { display: grid; gap: 2rem; }
+  .screenshot-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px var(--shadow); }
+  .screenshot-placeholder {
+    aspect-ratio: 16/9; background: var(--bg2);
+    border: 2px dashed var(--border); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fira Code', monospace; font-size: 0.85rem;
+    color: var(--muted); margin-bottom: 1rem;
+  }
+  .screenshot-caption { font-size: 0.85rem; color: var(--muted); text-align: center; }
+  
+  .cta-section { text-align: center; padding: 3rem 2rem; background: var(--bg2); border-radius: 12px; margin-top: 4rem; }
+  .btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; border-radius: 6px; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.25s; }
+  .btn-primary { background: var(--text); color: var(--bg); box-shadow: 0 4px 20px var(--shadow); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--shadow); }
+  
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .theme-toggle { right: 1.5rem; }
+    .container { padding: 6rem 1.5rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+  <div class="toggle-knob" id="toggleKnob">☀️</div>
+</button>
+
+<nav>
+  <a href="main.html" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="container">
+  <div class="project-header">
+    <div class="project-category">04 / Blockchain · Energy</div>
+    <h1 class="project-title">Solar-Chain</h1>
+    <p class="project-subtitle">Peer-to-peer solar energy trading platform on Algorand blockchain enabling direct energy transactions to reduce coal dependency. Reached Round 3 of the Algorand hackathon and won $250.</p>
+    
+    <div class="project-meta">
+      <span class="metric metric-gold">$250 prize</span>
+      <span class="metric metric-green">40–50% less coal</span>
+      <span class="metric metric-blue">Hackathon Round 3</span>
+    </div>
+    
+    <div class="tech-stack">
+      <span class="tag">Solidity</span>
+      <span class="tag">Python</span>
+      <span class="tag">Algorand</span>
+      <span class="tag">Smart Contracts</span>
+      <span class="tag">Web3</span>
+      <span class="tag">PyTeal</span>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Project Overview</h2>
+    <div class="section-content">
+      <p><strong>Solar-Chain</strong> is a decentralized energy trading platform built on the Algorand blockchain that enables peer-to-peer solar energy transactions. The project reached <strong>Round 3 of the Algorand hackathon</strong> and was awarded <strong>$250</strong> for its innovative approach to sustainable energy distribution.</p>
+      
+      <p>The platform addresses the critical challenge of coal dependency by creating a transparent marketplace where solar energy producers can directly sell excess power to consumers. By eliminating intermediaries and reducing reliance on traditional coal-powered grids, Solar-Chain has the potential to <strong>reduce coal usage by 40–50%</strong> in participating communities.</p>
+      
+      <p>Built on Algorand for its fast transaction speeds and low fees, the platform uses smart contracts to automate energy trading, pricing, and settlement. The system ensures:</p>
+      <ul>
+        <li><strong>Trustless Transactions:</strong> Smart contracts handle all trades without intermediaries</li>
+        <li><strong>Real-time Pricing:</strong> Dynamic pricing based on supply and demand</li>
+        <li><strong>Carbon Credits:</strong> Automatic tracking and issuance of carbon offset credits</li>
+        <li><strong>Micropayments:</strong> Algorand's low fees enable small-scale energy trades</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Key Features</h2>
+    <div class="section-content">
+      <ul>
+        <li><strong>P2P Energy Marketplace:</strong> Direct trading between solar producers and consumers</li>
+        <li><strong>Smart Contract Automation:</strong> Automated execution of trades based on predefined conditions</li>
+        <li><strong>Real-time Monitoring:</strong> Live dashboard showing energy production, consumption, and trading activity</li>
+        <li><strong>Dynamic Pricing Algorithm:</strong> Market-driven pricing that balances supply and demand</li>
+        <li><strong>Carbon Tracking:</strong> Transparent measurement of carbon footprint reduction</li>
+        <li><strong>Wallet Integration:</strong> Seamless connection with Algorand wallets for transactions</li>
+        <li><strong>Energy Credits:</strong> Tokenized representation of solar energy units</li>
+        <li><strong>Settlement System:</strong> Instant settlement of energy trades on the blockchain</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Technical Architecture</h2>
+    <div class="section-content">
+      <p>The platform consists of three main components:</p>
+      <ul>
+        <li><strong>Smart Contracts (PyTeal):</strong> Handle energy trading logic, pricing, and settlement on Algorand</li>
+        <li><strong>Backend (Python):</strong> Manages IoT data from solar panels and energy meters</li>
+        <li><strong>Frontend (React):</strong> User interface for producers and consumers to trade energy</li>
+      </ul>
+      
+      <p>The system integrates with IoT devices to monitor real-time energy production and consumption, automatically updating the blockchain with accurate data for transparent trading.</p>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Screenshots</h2>
+    <div class="screenshots">
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">🏠 Screenshot 1: Platform Dashboard</div>
+        <p class="screenshot-caption">Main dashboard showing energy marketplace and user balance</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">⚡ Screenshot 2: Energy Trading Interface</div>
+        <p class="screenshot-caption">Buy/sell interface with real-time pricing and available energy</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">📊 Screenshot 3: Analytics Dashboard</div>
+        <p class="screenshot-caption">Energy production, consumption, and trading analytics</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">🔐 Screenshot 4: Smart Contract Transactions</div>
+        <p class="screenshot-caption">Transaction history with blockchain verification</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">🌱 Screenshot 5: Carbon Impact Tracker</div>
+        <p class="screenshot-caption">Environmental impact visualization and carbon savings</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="cta-section">
+    <a href="https://github.com/SagarAgarwal2" target="_blank" class="btn btn-primary">View Code on GitHub →</a>
+  </div>
+</div>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  const knob = document.getElementById('toggleKnob');
+  const html = document.documentElement;
+  
+  const saved = localStorage.getItem('sa-theme') || 'light';
+  html.setAttribute('data-theme', saved);
+  knob.textContent = saved === 'dark' ? '🌙' : '☀️';
+  
+  toggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    knob.textContent = next === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('sa-theme', next);
+  });
+</script>
+</body>
+</html>

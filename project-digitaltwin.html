@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Digital Twin Market Engine — Sagar Agarwal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --bg2: #eeece6;
+    --surface: #fafaf8;
+    --border: #dddad2;
+    --accent: #1d4ed8;
+    --accent2: #b91c1c;
+    --accent3: #15803d;
+    --text: #18181b;
+    --muted: #71717a;
+    --card: #ffffff;
+    --shadow: rgba(0,0,0,0.06);
+  }
+  [data-theme="dark"] {
+    --bg: #0e0e0c;
+    --bg2: #141410;
+    --surface: #1a1a16;
+    --border: #2c2c26;
+    --accent: #6b9cfa;
+    --accent2: #f87171;
+    --accent3: #4ade80;
+    --text: #f0ede4;
+    --muted: #888278;
+    --card: #161614;
+    --shadow: rgba(0,0,0,0.5);
+  }
+  
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; transition: background 0.4s ease, color 0.4s ease; }
+  
+  .theme-toggle {
+    position: fixed; top: 1.3rem; right: 4rem; z-index: 200;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 100px; width: 56px; height: 28px;
+    cursor: pointer; display: flex; align-items: center; padding: 3px;
+    transition: background 0.3s, border 0.3s; box-shadow: 0 1px 4px var(--shadow);
+  }
+  .toggle-knob {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease; display: flex;
+    align-items: center; justify-content: center; font-size: 0.72rem;
+  }
+  [data-theme="dark"] .toggle-knob { transform: translateX(28px); }
+  
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem; backdrop-filter: blur(18px);
+    background: rgba(246,245,241,0.85);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.4s, border 0.4s;
+  }
+  [data-theme="dark"] nav { background: rgba(14,14,12,0.85); }
+  .nav-back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--muted); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.2s; }
+  .nav-back:hover { color: var(--text); gap: 0.7rem; }
+  
+  .container { max-width: 1000px; margin: 0 auto; padding: 8rem 2rem 4rem; }
+  
+  .project-header { margin-bottom: 4rem; }
+  .project-category { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+  .project-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1.5rem; }
+  .project-subtitle { color: var(--muted); font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin-bottom: 2rem; }
+  
+  .project-meta { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 2rem; }
+  .metric { font-size: 0.72rem; font-weight: 600; padding: 0.4rem 1rem; border-radius: 100px; }
+  .metric-blue { background: rgba(29,78,216,0.08); color: #1d4ed8; border: 1px solid rgba(29,78,216,0.2); }
+  .metric-green { background: rgba(21,128,61,0.08); color: #15803d; border: 1px solid rgba(21,128,61,0.2); }
+  [data-theme="dark"] .metric-blue { background: rgba(107,156,250,0.1); color: #6b9cfa; border-color: rgba(107,156,250,0.2); }
+  [data-theme="dark"] .metric-green { background: rgba(74,222,128,0.1); color: #4ade80; border-color: rgba(74,222,128,0.2); }
+  
+  .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag { font-size: 0.75rem; font-family: 'Fira Code', monospace; padding: 0.3rem 0.8rem; border-radius: 4px; background: var(--bg2); border: 1px solid var(--border); color: var(--muted); }
+  
+  .section { margin-bottom: 4rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.8rem; margin-bottom: 1.5rem; }
+  .section-content p { color: var(--muted); line-height: 1.9; font-size: 0.95rem; margin-bottom: 1.2rem; }
+  .section-content strong { color: var(--text); font-weight: 600; }
+  .section-content ul { margin-left: 1.5rem; color: var(--muted); line-height: 1.9; }
+  .section-content ul li { margin-bottom: 0.8rem; }
+  
+  .screenshots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .screenshot-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; box-shadow: 0 2px 12px var(--shadow); }
+  .screenshot-placeholder {
+    aspect-ratio: 16/9; background: var(--bg2);
+    border: 2px dashed var(--border); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fira Code', monospace; font-size: 0.75rem;
+    color: var(--muted); margin-bottom: 0.7rem;
+  }
+  .screenshot-caption { font-size: 0.8rem; color: var(--muted); text-align: center; }
+  
+  .cta-section { text-align: center; padding: 3rem 2rem; background: var(--bg2); border-radius: 12px; margin-top: 4rem; }
+  .btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; border-radius: 6px; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.25s; }
+  .btn-primary { background: var(--text); color: var(--bg); box-shadow: 0 4px 20px var(--shadow); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--shadow); }
+  
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .theme-toggle { right: 1.5rem; }
+    .container { padding: 6rem 1.5rem 3rem; }
+    .screenshots { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+  <div class="toggle-knob" id="toggleKnob">☀️</div>
+</button>
+
+<nav>
+  <a href="main.html" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="container">
+  <div class="project-header">
+    <div class="project-category">06 / AI · Simulation</div>
+    <h1 class="project-title">Digital Twin Market Engine — FMCG Simulator</h1>
+    <p class="project-subtitle">React-based simulation platform that models FMCG product launches using machine learning in the browser with TensorFlow.js, simulating 25,000 synthetic customer personas.</p>
+    
+    <div class="project-meta">
+      <span class="metric metric-blue">25k personas</span>
+      <span class="metric metric-green">ML-powered</span>
+    </div>
+    
+    <div class="tech-stack">
+      <span class="tag">React</span>
+      <span class="tag">TensorFlow.js</span>
+      <span class="tag">Chart.js</span>
+      <span class="tag">K-Means</span>
+      <span class="tag">Neural Networks</span>
+      <span class="tag">JavaScript</span>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Project Overview</h2>
+    <div class="section-content">
+      <p><strong>Digital Twin Market Engine</strong> is an advanced simulation platform built for FMCG (Fast-Moving Consumer Goods) companies to model and predict product launch outcomes. Running entirely in the browser using TensorFlow.js, the system simulates <strong>25,000 synthetic customer personas</strong> and uses machine learning to predict purchase probability, customer segmentation, churn risk, and optimal pricing strategies.</p>
+      
+      <p>The platform demonstrates the power of client-side machine learning, eliminating the need for backend infrastructure while delivering sophisticated predictive analytics. Built with React for a responsive interface and Chart.js for data visualization, the simulator provides immediate insights into market dynamics.</p>
+      
+      <p>Key ML capabilities include:</p>
+      <ul>
+        <li><strong>Neural Networks:</strong> Deep learning models for purchase probability prediction</li>
+        <li><strong>K-Means Clustering:</strong> Customer segmentation based on behavior patterns</li>
+        <li><strong>Regression Models:</strong> Price elasticity and demand forecasting</li>
+        <li><strong>Churn Prediction:</strong> Identify customers at risk of switching products</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Key Features</h2>
+    <div class="section-content">
+      <ul>
+        <li><strong>Browser-based ML:</strong> All machine learning runs client-side with TensorFlow.js</li>
+        <li><strong>Synthetic Persona Generation:</strong> Creates 25,000 realistic customer profiles with diverse characteristics</li>
+        <li><strong>Purchase Probability Prediction:</strong> Neural network predicts likelihood of purchase for each persona</li>
+        <li><strong>Customer Segmentation:</strong> K-Means clustering groups customers into meaningful segments</li>
+        <li><strong>Churn Risk Analysis:</strong> Identifies customers likely to stop purchasing</li>
+        <li><strong>Pricing Optimization:</strong> Regression models find optimal price points</li>
+        <li><strong>Interactive Dashboards:</strong> Real-time visualization of simulation results using Chart.js</li>
+        <li><strong>Scenario Testing:</strong> Compare different product launch strategies</li>
+        <li><strong>Export Capabilities:</strong> Download simulation data and insights</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Technical Implementation</h2>
+    <div class="section-content">
+      <p>The platform leverages cutting-edge web technologies for ML inference:</p>
+      <ul>
+        <li><strong>TensorFlow.js:</strong> Complete ML framework running in the browser</li>
+        <li><strong>Neural Network Architecture:</strong> Multi-layer perceptrons with dropout and batch normalization</li>
+        <li><strong>K-Means Implementation:</strong> Custom clustering algorithm optimized for browser performance</li>
+        <li><strong>Web Workers:</strong> Parallel processing for faster simulations</li>
+        <li><strong>IndexedDB:</strong> Local storage of model weights and simulation results</li>
+        <li><strong>Chart.js:</strong> Dynamic, responsive visualizations for insights</li>
+        <li><strong>React Context API:</strong> Efficient state management for ML models</li>
+      </ul>
+      
+      <p>The system generates synthetic data using probabilistic models that mirror real-world customer behavior, including demographics, purchase history, price sensitivity, and brand loyalty factors.</p>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Use Cases</h2>
+    <div class="section-content">
+      <ul>
+        <li><strong>Product Launch Planning:</strong> Simulate market response before actual launch</li>
+        <li><strong>Pricing Strategy:</strong> Find optimal price points for maximum revenue</li>
+        <li><strong>Market Segmentation:</strong> Identify and target high-value customer segments</li>
+        <li><strong>Churn Prevention:</strong> Proactively address customer retention risks</li>
+        <li><strong>A/B Testing:</strong> Compare different marketing and pricing strategies</li>
+        <li><strong>Demand Forecasting:</strong> Predict sales volumes under various scenarios</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Screenshots</h2>
+    <div class="screenshots">
+      <div class="screenshot-item">
+        <img src="assests/Screenshot 2026-03-01 080153.png" alt="ML Customer Clusters" style="width: 100%; border-radius: 6px; margin-bottom: 0.7rem;">
+        <p class="screenshot-caption">K-Means clustering identified 6 natural customer segments</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <img src="assests/Screenshot 2026-03-01 080206.png" alt="Groq LLM Intelligence Layer" style="width: 100%; border-radius: 6px; margin-bottom: 0.7rem;">
+        <p class="screenshot-caption">AI Market Analyst powered by Groq + Llama 3.1 for real-time insights</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <img src="assests/Screenshot 2026-03-01 080237.png" alt="Churn & Retention Prediction" style="width: 100%; border-radius: 6px; margin-bottom: 0.7rem;">
+        <p class="screenshot-caption">Segment-wise churn risk analysis with CLV and priority metrics</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <img src="assests/Screenshot 2026-03-01 080254.png" alt="Purchase Probability & Revenue" style="width: 100%; border-radius: 6px; margin-bottom: 0.7rem;">
+        <p class="screenshot-caption">ML vs Rule-Based comparison and revenue optimization curve</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <img src="assests/Screenshot 2026-03-01 080307.png" alt="Product Configuration Dashboard" style="width: 100%; border-radius: 6px; margin-bottom: 0.7rem;">
+        <p class="screenshot-caption">ML-powered optimal pricing with 81.8% confidence score</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <img src="assests/Screenshot 2026-03-01 080326.png" alt="Customer Insights Dashboard" style="width: 100%; border-radius: 6px; margin-bottom: 0.7rem;">
+        <p class="screenshot-caption">Comprehensive customer analytics and behavior insights</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="cta-section">
+    <a href="https://github.com/SagarAgarwal2" target="_blank" class="btn btn-primary">View Code on GitHub →</a>
+  </div>
+</div>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  const knob = document.getElementById('toggleKnob');
+  const html = document.documentElement;
+  
+  const saved = localStorage.getItem('sa-theme') || 'light';
+  html.setAttribute('data-theme', saved);
+  knob.textContent = saved === 'dark' ? '🌙' : '☀️';
+  
+  toggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    knob.textContent = next === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('sa-theme', next);
+  });
+</script>
+</body>
+</html>

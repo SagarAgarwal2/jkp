@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Battle of Bytes — Live Auction — Sagar Agarwal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --bg2: #eeece6;
+    --surface: #fafaf8;
+    --border: #dddad2;
+    --accent: #1d4ed8;
+    --accent2: #b91c1c;
+    --accent3: #15803d;
+    --text: #18181b;
+    --muted: #71717a;
+    --card: #ffffff;
+    --shadow: rgba(0,0,0,0.06);
+  }
+  [data-theme="dark"] {
+    --bg: #0e0e0c;
+    --bg2: #141410;
+    --surface: #1a1a16;
+    --border: #2c2c26;
+    --accent: #6b9cfa;
+    --accent2: #f87171;
+    --accent3: #4ade80;
+    --text: #f0ede4;
+    --muted: #888278;
+    --card: #161614;
+    --shadow: rgba(0,0,0,0.5);
+  }
+  
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; transition: background 0.4s ease, color 0.4s ease; }
+  
+  .theme-toggle {
+    position: fixed; top: 1.3rem; right: 4rem; z-index: 200;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 100px; width: 56px; height: 28px;
+    cursor: pointer; display: flex; align-items: center; padding: 3px;
+    transition: background 0.3s, border 0.3s; box-shadow: 0 1px 4px var(--shadow);
+  }
+  .toggle-knob {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease; display: flex;
+    align-items: center; justify-content: center; font-size: 0.72rem;
+  }
+  [data-theme="dark"] .toggle-knob { transform: translateX(28px); }
+  
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem; backdrop-filter: blur(18px);
+    background: rgba(246,245,241,0.85);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.4s, border 0.4s;
+  }
+  [data-theme="dark"] nav { background: rgba(14,14,12,0.85); }
+  .nav-back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--muted); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.2s; }
+  .nav-back:hover { color: var(--text); gap: 0.7rem; }
+  
+  .container { max-width: 1000px; margin: 0 auto; padding: 8rem 2rem 4rem; }
+  
+  .project-header { margin-bottom: 4rem; }
+  .project-category { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+  .project-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1.5rem; }
+  .project-subtitle { color: var(--muted); font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin-bottom: 2rem; }
+  
+  .project-meta { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 2rem; }
+  .metric { font-size: 0.72rem; font-weight: 600; padding: 0.4rem 1rem; border-radius: 100px; }
+  .metric-blue { background: rgba(29,78,216,0.08); color: #1d4ed8; border: 1px solid rgba(29,78,216,0.2); }
+  .metric-green { background: rgba(21,128,61,0.08); color: #15803d; border: 1px solid rgba(21,128,61,0.2); }
+  [data-theme="dark"] .metric-blue { background: rgba(107,156,250,0.1); color: #6b9cfa; border-color: rgba(107,156,250,0.2); }
+  [data-theme="dark"] .metric-green { background: rgba(74,222,128,0.1); color: #4ade80; border-color: rgba(74,222,128,0.2); }
+  
+  .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag { font-size: 0.75rem; font-family: 'Fira Code', monospace; padding: 0.3rem 0.8rem; border-radius: 4px; background: var(--bg2); border: 1px solid var(--border); color: var(--muted); }
+  
+  .section { margin-bottom: 4rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.8rem; margin-bottom: 1.5rem; }
+  .section-content p { color: var(--muted); line-height: 1.9; font-size: 0.95rem; margin-bottom: 1.2rem; }
+  .section-content strong { color: var(--text); font-weight: 600; }
+  .section-content ul { margin-left: 1.5rem; color: var(--muted); line-height: 1.9; }
+  .section-content ul li { margin-bottom: 0.8rem; }
+  
+  .screenshots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .screenshot-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; box-shadow: 0 2px 12px var(--shadow); }
+  .screenshot-placeholder {
+    aspect-ratio: 16/9; background: var(--bg2);
+    border: 2px dashed var(--border); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fira Code', monospace; font-size: 0.75rem;
+    color: var(--muted); margin-bottom: 0.7rem;
+  }
+  .screenshot-caption { font-size: 0.8rem; color: var(--muted); text-align: center; }
+  
+  .cta-section { text-align: center; padding: 3rem 2rem; background: var(--bg2); border-radius: 12px; margin-top: 4rem; }
+  .btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; border-radius: 6px; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.25s; }
+  .btn-primary { background: var(--text); color: var(--bg); box-shadow: 0 4px 20px var(--shadow); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--shadow); }
+  
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .theme-toggle { right: 1.5rem; }
+    .container { padding: 6rem 1.5rem 3rem; }
+    .screenshots { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+  <div class="toggle-knob" id="toggleKnob">☀️</div>
+</button>
+
+<nav>
+  <a href="main.html" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="container">
+  <div class="project-header">
+    <div class="project-category">05 / Full-Stack · Real-Time</div>
+    <h1 class="project-title">Battle of Bytes — Live Auction</h1>
+    <p class="project-subtitle">React-based live auction platform featuring a real-time bidding dashboard, team polling system, and interactive UI powered by Firebase Firestore with countdown timers and immersive sound effects.</p>
+    
+    <div class="project-meta">
+      <span class="metric metric-blue">Real-time bidding</span>
+      <span class="metric metric-green">Interactive UI</span>
+    </div>
+    
+    <div class="tech-stack">
+      <span class="tag">React</span>
+      <span class="tag">Firebase Firestore</span>
+      <span class="tag">Framer Motion</span>
+      <span class="tag">Web Audio API</span>
+      <span class="tag">CSS3</span>
+      <span class="tag">JavaScript</span>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Project Overview</h2>
+    <div class="section-content">
+      <p><strong>Battle of Bytes</strong> is a comprehensive web application developed for a live auction event, combining real-time bidding functionality with an engaging user experience. The platform was designed to handle multiple concurrent users participating in live auctions with instant bid updates and team-based polling.</p>
+      
+      <p>Built entirely with React and Firebase Firestore, the application demonstrates advanced real-time data synchronization capabilities. Every bid, poll response, and auction state change is instantly reflected across all connected clients, creating a seamless and engaging experience for participants.</p>
+      
+      <p>The platform features:</p>
+      <ul>
+        <li><strong>Real-time Bidding:</strong> Instant bid updates synchronized across all users via Firestore</li>
+        <li><strong>Team Polling System:</strong> Live voting and results display for team decisions</li>
+        <li><strong>Countdown Timers:</strong> Precise timing for auction rounds with visual feedback</li>
+        <li><strong>Sound Effects:</strong> Immersive audio feedback using Web Audio API</li>
+        <li><strong>Smooth Animations:</strong> Polished UI transitions with Framer Motion</li>
+        <li><strong>Responsive Design:</strong> Fully functional across desktop, tablet, and mobile devices</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Key Features</h2>
+    <div class="section-content">
+      <ul>
+        <li><strong>Live Bidding Dashboard:</strong> Real-time display of current bids, bidding history, and auction status</li>
+        <li><strong>Multi-user Support:</strong> Handles concurrent bidders with conflict resolution</li>
+        <li><strong>Team Polling:</strong> Interactive voting system for team-based decisions</li>
+        <li><strong>Participant Showcase:</strong> Visual display of all active participants and their teams</li>
+        <li><strong>Event Gallery:</strong> Media gallery featuring event highlights and moments</li>
+        <li><strong>Countdown Timers:</strong> Multiple synchronized timers for different auction phases</li>
+        <li><strong>Audio Feedback:</strong> Dynamic sound effects for bids, wins, and time warnings</li>
+        <li><strong>Animation Library:</strong> Smooth transitions and micro-interactions using Framer Motion</li>
+        <li><strong>Admin Controls:</strong> Backend management for auction items and settings</li>
+        <li><strong>Bid Validation:</strong> Real-time validation and minimum increment enforcement</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Technical Implementation</h2>
+    <div class="section-content">
+      <p>The application architecture prioritizes real-time performance and user experience:</p>
+      <ul>
+        <li><strong>React Hooks:</strong> Modern state management with useState, useEffect, and custom hooks</li>
+        <li><strong>Firebase Realtime Listeners:</strong> Firestore snapshot listeners for instant data updates</li>
+        <li><strong>Web Audio API:</strong> Dynamic audio playback with volume control and timing</li>
+        <li><strong>Framer Motion:</strong> Declarative animations with gesture support</li>
+        <li><strong>CSS Grid & Flexbox:</strong> Responsive layouts adapting to any screen size</li>
+        <li><strong>Optimistic UI Updates:</strong> Immediate user feedback with server reconciliation</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Screenshots</h2>
+    <div class="screenshots">
+      <div class="screenshot-item">
+        <img src="assests/Screenshot 2026-03-04 132020.png" alt="Home Page Landing" style="width: 100%; border-radius: 6px; margin-bottom: 0.7rem;">
+        <p class="screenshot-caption">Battle of Bytes Auction Event main landing page with hero section</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <img src="assests/Screenshot 2026-03-04 132045.png" alt="Player Auction Dashboard" style="width: 100%; border-radius: 6px; margin-bottom: 0.7rem;">
+        <p class="screenshot-caption">Live auction interface with Start Auction and Reset controls</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="cta-section">
+    <a href="https://github.com/SagarAgarwal2" target="_blank" class="btn btn-primary">View Code on GitHub →</a>
+  </div>
+</div>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  const knob = document.getElementById('toggleKnob');
+  const html = document.documentElement;
+  
+  const saved = localStorage.getItem('sa-theme') || 'light';
+  html.setAttribute('data-theme', saved);
+  knob.textContent = saved === 'dark' ? '🌙' : '☀️';
+  
+  toggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    knob.textContent = next === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('sa-theme', next);
+  });
+</script>
+</body>
+</html>

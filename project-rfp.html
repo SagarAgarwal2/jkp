@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agentic RFP Automation — Sagar Agarwal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --bg2: #eeece6;
+    --surface: #fafaf8;
+    --border: #dddad2;
+    --accent: #1d4ed8;
+    --accent2: #b91c1c;
+    --accent3: #15803d;
+    --text: #18181b;
+    --muted: #71717a;
+    --card: #ffffff;
+    --shadow: rgba(0,0,0,0.06);
+  }
+  [data-theme="dark"] {
+    --bg: #0e0e0c;
+    --bg2: #141410;
+    --surface: #1a1a16;
+    --border: #2c2c26;
+    --accent: #6b9cfa;
+    --accent2: #f87171;
+    --accent3: #4ade80;
+    --text: #f0ede4;
+    --muted: #888278;
+    --card: #161614;
+    --shadow: rgba(0,0,0,0.5);
+  }
+  
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; transition: background 0.4s ease, color 0.4s ease; }
+  
+  .theme-toggle {
+    position: fixed; top: 1.3rem; right: 4rem; z-index: 200;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 100px; width: 56px; height: 28px;
+    cursor: pointer; display: flex; align-items: center; padding: 3px;
+    transition: background 0.3s, border 0.3s; box-shadow: 0 1px 4px var(--shadow);
+  }
+  .toggle-knob {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease; display: flex;
+    align-items: center; justify-content: center; font-size: 0.72rem;
+  }
+  [data-theme="dark"] .toggle-knob { transform: translateX(28px); }
+  
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem; backdrop-filter: blur(18px);
+    background: rgba(246,245,241,0.85);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.4s, border 0.4s;
+  }
+  [data-theme="dark"] nav { background: rgba(14,14,12,0.85); }
+  .nav-back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--muted); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.2s; }
+  .nav-back:hover { color: var(--text); gap: 0.7rem; }
+  
+  .container { max-width: 1000px; margin: 0 auto; padding: 8rem 2rem 4rem; }
+  
+  .project-header { margin-bottom: 4rem; }
+  .project-category { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+  .project-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1.5rem; }
+  .project-subtitle { color: var(--muted); font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin-bottom: 2rem; }
+  
+  .project-meta { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 2rem; }
+  .metric { font-size: 0.72rem; font-weight: 600; padding: 0.4rem 1rem; border-radius: 100px; }
+  .metric-green { background: rgba(21,128,61,0.08); color: #15803d; border: 1px solid rgba(21,128,61,0.2); }
+  .metric-blue { background: rgba(29,78,216,0.08); color: #1d4ed8; border: 1px solid rgba(29,78,216,0.2); }
+  [data-theme="dark"] .metric-green { background: rgba(74,222,128,0.1); color: #4ade80; border-color: rgba(74,222,128,0.2); }
+  [data-theme="dark"] .metric-blue { background: rgba(107,156,250,0.1); color: #6b9cfa; border-color: rgba(107,156,250,0.2); }
+  
+  .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag { font-size: 0.75rem; font-family: 'Fira Code', monospace; padding: 0.3rem 0.8rem; border-radius: 4px; background: var(--bg2); border: 1px solid var(--border); color: var(--muted); }
+  
+  .section { margin-bottom: 4rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.8rem; margin-bottom: 1.5rem; }
+  .section-content p { color: var(--muted); line-height: 1.9; font-size: 0.95rem; margin-bottom: 1.2rem; }
+  .section-content strong { color: var(--text); font-weight: 600; }
+  .section-content ul { margin-left: 1.5rem; color: var(--muted); line-height: 1.9; }
+  .section-content ul li { margin-bottom: 0.8rem; }
+  
+  .screenshots { display: grid; gap: 2rem; }
+  .screenshot-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px var(--shadow); }
+  .screenshot-placeholder {
+    aspect-ratio: 16/9; background: var(--bg2);
+    border: 2px dashed var(--border); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fira Code', monospace; font-size: 0.85rem;
+    color: var(--muted); margin-bottom: 1rem;
+  }
+  .screenshot-caption { font-size: 0.85rem; color: var(--muted); text-align: center; }
+  
+  .cta-section { text-align: center; padding: 3rem 2rem; background: var(--bg2); border-radius: 12px; margin-top: 4rem; }
+  .btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; border-radius: 6px; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.25s; }
+  .btn-primary { background: var(--text); color: var(--bg); box-shadow: 0 4px 20px var(--shadow); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--shadow); }
+  
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .theme-toggle { right: 1.5rem; }
+    .container { padding: 6rem 1.5rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+  <div class="toggle-knob" id="toggleKnob">☀️</div>
+</button>
+
+<nav>
+  <a href="main.html" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="container">
+  <div class="project-header">
+    <div class="project-category">02 / AI · Automation</div>
+    <h1 class="project-title">Agentic RFP Automation</h1>
+    <p class="project-subtitle">Multi-agent AI platform for the paint industry automating RFP analysis, vendor selection, and pricing with RAG-based semantic matching and real-time decision intelligence.</p>
+    
+    <div class="project-meta">
+      <span class="metric metric-green">99% faster (3h → 7s)</span>
+      <span class="metric metric-blue">90% match accuracy</span>
+    </div>
+    
+    <div class="tech-stack">
+      <span class="tag">React</span>
+      <span class="tag">RAG</span>
+      <span class="tag">NLP</span>
+      <span class="tag">Firebase</span>
+      <span class="tag">PDF.js</span>
+      <span class="tag">LangChain</span>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Project Overview</h2>
+    <div class="section-content">
+      <p><strong>Agentic RFP Automation</strong> revolutionizes the paint industry's procurement process by automating the traditionally manual and time-consuming RFP (Request for Proposal) analysis workflow. The platform reduces processing time from <strong>3 hours to just 7 seconds</strong>, achieving <strong>99% faster turnaround</strong> with <strong>90% match accuracy</strong>.</p>
+      
+      <p>The system uses a multi-agent architecture where specialized AI agents handle different aspects of the RFP process:</p>
+      <ul>
+        <li><strong>Document Parser Agent:</strong> Extracts and structures data from RFP PDFs</li>
+        <li><strong>Semantic Matcher Agent:</strong> Uses RAG to match requirements with vendor capabilities</li>
+        <li><strong>Pricing Agent:</strong> Analyzes historical data to suggest optimal pricing</li>
+        <li><strong>Decision Agent:</strong> Aggregates insights and generates recommendations</li>
+      </ul>
+      
+      <p>Built with React for a smooth user experience, the platform leverages Firebase for real-time synchronization and PDF.js for document processing.</p>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Key Features</h2>
+    <div class="section-content">
+      <ul>
+        <li><strong>Intelligent Document Processing:</strong> Automated extraction of requirements, specifications, and constraints from RFP documents</li>
+        <li><strong>RAG-Powered Matching:</strong> Retrieval-Augmented Generation for accurate vendor-requirement alignment</li>
+        <li><strong>Real-time Dashboard:</strong> Live updates on processing status and decision metrics</li>
+        <li><strong>Historical Analysis:</strong> Learns from past RFPs to improve recommendations</li>
+        <li><strong>Multi-format Support:</strong> Handles PDFs, Word documents, and structured data inputs</li>
+        <li><strong>Vendor Database Integration:</strong> Seamless connection with existing vendor management systems</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2 class="section-title">Screenshots</h2>
+    <div class="screenshots">
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">🏠 Screenshot 1: Dashboard Overview</div>
+        <p class="screenshot-caption">Main dashboard showing active RFPs and processing status</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">📄 Screenshot 2: Document Upload Interface</div>
+        <p class="screenshot-caption">Drag-and-drop interface for RFP document upload</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">🤖 Screenshot 3: AI Analysis in Progress</div>
+        <p class="screenshot-caption">Real-time visualization of multi-agent processing pipeline</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">📊 Screenshot 4: Vendor Matching Results</div>
+        <p class="screenshot-caption">Semantic match scores and vendor recommendations</p>
+      </div>
+      
+      <div class="screenshot-item">
+        <div class="screenshot-placeholder">💰 Screenshot 5: Pricing Analysis Dashboard</div>
+        <p class="screenshot-caption">Historical pricing trends and optimization suggestions</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="cta-section">
+    <a href="https://github.com/SagarAgarwal2" target="_blank" class="btn btn-primary">View Code on GitHub →</a>
+  </div>
+</div>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  const knob = document.getElementById('toggleKnob');
+  const html = document.documentElement;
+  
+  const saved = localStorage.getItem('sa-theme') || 'light';
+  html.setAttribute('data-theme', saved);
+  knob.textContent = saved === 'dark' ? '🌙' : '☀️';
+  
+  toggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    knob.textContent = next === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('sa-theme', next);
+  });
+</script>
+</body>
+</html>
