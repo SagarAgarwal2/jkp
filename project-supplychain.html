@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Supply Chain Tracker — Sagar Agarwal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root{--bg:#f6f5f1;--bg2:#eeece6;--surface:#fafaf8;--border:#dddad2;--accent:#1d4ed8;--accent2:#b91c1c;--accent3:#15803d;--text:#18181b;--muted:#71717a;--card:#fff;--shadow:rgba(0,0,0,.06)}
+  [data-theme="dark"]{--bg:#0e0e0c;--bg2:#141410;--surface:#1a1a16;--border:#2c2c26;--accent:#6b9cfa;--accent2:#f87171;--accent3:#4ade80;--text:#f0ede4;--muted:#888278;--card:#161614;--shadow:rgba(0,0,0,.5)}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;transition:background .4s,color .4s}
+  .theme-toggle{position:fixed;top:1.3rem;right:4rem;z-index:200;background:var(--bg2);border:1px solid var(--border);border-radius:100px;width:56px;height:28px;cursor:pointer;display:flex;align-items:center;padding:3px;transition:background .3s,border .3s;box-shadow:0 1px 4px var(--shadow)}
+  .toggle-knob{width:22px;height:22px;border-radius:50%;background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.2);transition:transform .3s;display:flex;align-items:center;justify-content:center;font-size:.72rem}
+  [data-theme="dark"] .toggle-knob{transform:translateX(28px)}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;backdrop-filter:blur(18px);background:rgba(246,245,241,.85);border-bottom:1px solid var(--border);transition:background .4s,border .4s}
+  [data-theme="dark"] nav{background:rgba(14,14,12,.85)}
+  .nav-back{display:inline-flex;align-items:center;gap:.5rem;color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;transition:all .2s}.nav-back:hover{color:var(--text);gap:.7rem}
+  .container{max-width:1000px;margin:0 auto;padding:8rem 2rem 4rem}
+  .project-header{margin-bottom:4rem}
+  .project-category{font-family:'Fira Code',monospace;font-size:.72rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+  .project-title{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(2.5rem,5vw,4rem);letter-spacing:-.025em;line-height:1.1;margin-bottom:1.5rem}
+  .project-subtitle{color:var(--muted);font-size:1.1rem;line-height:1.8;max-width:800px;margin-bottom:2rem}
+  .project-meta{display:flex;flex-wrap:wrap;gap:.8rem;margin-bottom:2rem}
+  .metric{font-size:.72rem;font-weight:600;padding:.4rem 1rem;border-radius:100px}
+  .metric-blue{background:rgba(29,78,216,.08);color:#1d4ed8;border:1px solid rgba(29,78,216,.2)}
+  .metric-green{background:rgba(21,128,61,.08);color:#15803d;border:1px solid rgba(21,128,61,.2)}
+  .metric-gold{background:rgba(161,98,7,.08);color:#a16207;border:1px solid rgba(161,98,7,.2)}
+  [data-theme="dark"] .metric-blue{background:rgba(107,156,250,.1);color:#6b9cfa;border-color:rgba(107,156,250,.2)}
+  [data-theme="dark"] .metric-green{background:rgba(74,222,128,.1);color:#4ade80;border-color:rgba(74,222,128,.2)}
+  [data-theme="dark"] .metric-gold{background:rgba(253,224,71,.1);color:#fbbf24;border-color:rgba(253,224,71,.2)}
+  .tech-stack{display:flex;flex-wrap:wrap;gap:.5rem}
+  .tag{font-size:.75rem;font-family:'Fira Code',monospace;padding:.3rem .8rem;border-radius:4px;background:var(--bg2);border:1px solid var(--border);color:var(--muted)}
+  .section{margin-bottom:4rem}
+  .section-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1.8rem;margin-bottom:1.5rem}
+  .section-content p{color:var(--muted);line-height:1.9;font-size:.95rem;margin-bottom:1.2rem}
+  .section-content strong{color:var(--text);font-weight:600}
+  .section-content ul{margin-left:1.5rem;color:var(--muted);line-height:1.9}
+  .section-content ul li{margin-bottom:.8rem}
+  .cta-section{text-align:center;padding:3rem 2rem;background:var(--bg2);border-radius:12px;margin-top:4rem}
+  .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2rem;border-radius:6px;font-size:.88rem;font-weight:600;text-decoration:none;transition:all .25s}
+  .btn-primary{background:var(--text);color:var(--bg);box-shadow:0 4px 20px var(--shadow)}.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px var(--shadow)}
+  .screenshots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1.5rem}
+  .screenshot-item{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 2px 12px var(--shadow);transition:all .3s}
+  .screenshot-item:hover{transform:translateY(-4px);box-shadow:0 12px 36px var(--shadow);border-color:var(--accent)}
+  .screenshot-item img{width:100%;display:block;transition:transform .4s}
+  .screenshot-item:hover img{transform:scale(1.03)}
+  .screenshot-caption{padding:.75rem 1rem;font-size:.78rem;color:var(--muted);line-height:1.5;border-top:1px solid var(--border)}
+  @media(max-width:900px){.screenshots-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:768px){nav{padding:1rem 1.5rem}.theme-toggle{right:1.5rem}.container{padding:6rem 1.5rem 3rem}.screenshots-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><div class="toggle-knob" id="toggleKnob">☀️</div></button>
+<nav><a href="index.html" class="nav-back">← Back to Portfolio</a></nav>
+
+<div class="container">
+  <div class="project-header">
+    <div class="project-category">08 / Blockchain · Logistics</div>
+    <h1 class="project-title">Supply Chain Tracker</h1>
+    <p class="project-subtitle">Blockchain-powered supply chain transparency platform with end-to-end product tracking, smart contract verification, and real-time analytics. Immutable ledger ensures provenance and anti-counterfeiting across the logistics pipeline.</p>
+    <div class="project-meta">
+      <span class="metric metric-blue">Immutable ledger</span>
+      <span class="metric metric-green">Real-time tracking</span>
+      <span class="metric metric-gold">Smart contracts</span>
+    </div>
+    <div class="tech-stack">
+      <span class="tag">Solidity</span><span class="tag">React</span><span class="tag">Node.js</span><span class="tag">Ethereum</span><span class="tag">IPFS</span><span class="tag">Web3.js</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Project Overview</h2>
+    <div class="section-content">
+      <p><strong>Supply Chain Tracker</strong> is a decentralized platform that brings transparency and traceability to product supply chains using blockchain technology. Every stage of the supply chain — from raw material sourcing to final delivery — is recorded as an immutable transaction on the Ethereum blockchain.</p>
+      <p>The platform addresses critical challenges in supply chain management including <strong>counterfeiting</strong>, <strong>provenance verification</strong>, and <strong>lack of real-time visibility</strong> across multi-tier supplier networks.</p>
+      <ul>
+        <li><strong>Product Registration:</strong> Manufacturers register products with unique digital identities on-chain</li>
+        <li><strong>Checkpoint Tracking:</strong> Every handoff in the supply chain is recorded with timestamps, location, and handler verification</li>
+        <li><strong>Smart Contract Verification:</strong> Automated compliance checks and quality attestations enforced via Solidity contracts</li>
+        <li><strong>IPFS Document Storage:</strong> Certificates, invoices, and quality reports stored on IPFS with on-chain hash references</li>
+        <li><strong>Real-Time Dashboard:</strong> React-based analytics dashboard showing product journey, status, and anomaly detection</li>
+        <li><strong>Anti-Counterfeiting:</strong> QR code-based verification allowing end consumers to validate product authenticity</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Key Features</h2>
+    <div class="section-content">
+      <ul>
+        <li><strong>End-to-End Traceability:</strong> Complete product history from origin to consumer, stored immutably on blockchain</li>
+        <li><strong>Multi-Stakeholder Access:</strong> Role-based dashboards for manufacturers, distributors, retailers, and regulators</li>
+        <li><strong>Anomaly Detection:</strong> Automatic flagging of unusual patterns like route deviations or temperature breaches</li>
+        <li><strong>Batch Management:</strong> Track entire product batches with lot numbers and expiry tracking</li>
+        <li><strong>QR Code Verification:</strong> Consumer-facing product authentication via mobile scanning</li>
+        <li><strong>Analytics & Reports:</strong> Real-time supply chain metrics, delivery times, and compliance reports</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Technical Implementation</h2>
+    <div class="section-content">
+      <ul>
+        <li><strong>Solidity Smart Contracts:</strong> Core business logic for product registration, transfer, and verification</li>
+        <li><strong>Ethereum (Testnet):</strong> Blockchain network for deploying and executing smart contracts</li>
+        <li><strong>Web3.js:</strong> JavaScript library bridging the React frontend with Ethereum smart contracts</li>
+        <li><strong>IPFS:</strong> Decentralized file storage for documents and certificates with content-addressing</li>
+        <li><strong>React:</strong> Component-based frontend with interactive dashboards and real-time data visualization</li>
+        <li><strong>Node.js / Express:</strong> Backend API layer for off-chain data aggregation and caching</li>
+        <li><strong>MetaMask Integration:</strong> Wallet connection for blockchain transaction signing</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Screenshots</h2>
+    <div class="section-content">
+      <p>A visual walkthrough of the Supply Chain Tracker — from product registration on-chain to end-to-end shipment traceability.</p>
+    </div>
+    <div class="screenshots-grid">
+      <div class="screenshot-item">
+        <img src="assests/ss-supplychain-1.png" alt="Supply Chain Dashboard" loading="lazy">
+        <div class="screenshot-caption">Dashboard — live overview of tracked products, active shipments, and blockchain transaction status</div>
+      </div>
+      <div class="screenshot-item">
+        <img src="assests/ss-supplychain-2.png" alt="Product Tracking" loading="lazy">
+        <div class="screenshot-caption">Product Journey — end-to-end traceability view showing each checkpoint, handler, timestamp &amp; location</div>
+      </div>
+      <div class="screenshot-item">
+        <img src="assests/ss-supplychain-3.png" alt="Smart Contract Verification" loading="lazy">
+        <div class="screenshot-caption">Blockchain Verification — on-chain smart contract records with provenance proof and anti-counterfeiting QR</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <a href="https://github.com/SagarAgarwal2" target="_blank" class="btn btn-primary">View Code on GitHub →</a>
+  </div>
+</div>
+
+<script>
+  const toggle=document.getElementById('themeToggle'),knob=document.getElementById('toggleKnob'),html=document.documentElement;
+  const saved=localStorage.getItem('sa-theme')||'light';html.setAttribute('data-theme',saved);knob.textContent=saved==='dark'?'🌙':'☀️';
+  toggle.addEventListener('click',()=>{const next=html.getAttribute('data-theme')==='dark'?'light':'dark';html.setAttribute('data-theme',next);knob.textContent=next==='dark'?'🌙':'☀️';localStorage.setItem('sa-theme',next);});
+</script>
+</body>
+</html>

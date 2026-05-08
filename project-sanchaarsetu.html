@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sanchaar Setu — Sagar Agarwal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root{--bg:#f6f5f1;--bg2:#eeece6;--surface:#fafaf8;--border:#dddad2;--accent:#1d4ed8;--accent2:#b91c1c;--accent3:#15803d;--text:#18181b;--muted:#71717a;--card:#fff;--shadow:rgba(0,0,0,.06)}
+  [data-theme="dark"]{--bg:#0e0e0c;--bg2:#141410;--surface:#1a1a16;--border:#2c2c26;--accent:#6b9cfa;--accent2:#f87171;--accent3:#4ade80;--text:#f0ede4;--muted:#888278;--card:#161614;--shadow:rgba(0,0,0,.5)}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;transition:background .4s,color .4s}
+  .theme-toggle{position:fixed;top:1.3rem;right:4rem;z-index:200;background:var(--bg2);border:1px solid var(--border);border-radius:100px;width:56px;height:28px;cursor:pointer;display:flex;align-items:center;padding:3px;transition:background .3s,border .3s;box-shadow:0 1px 4px var(--shadow)}
+  .toggle-knob{width:22px;height:22px;border-radius:50%;background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.2);transition:transform .3s;display:flex;align-items:center;justify-content:center;font-size:.72rem}
+  [data-theme="dark"] .toggle-knob{transform:translateX(28px)}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;backdrop-filter:blur(18px);background:rgba(246,245,241,.85);border-bottom:1px solid var(--border);transition:background .4s,border .4s}
+  [data-theme="dark"] nav{background:rgba(14,14,12,.85)}
+  .nav-back{display:inline-flex;align-items:center;gap:.5rem;color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;transition:all .2s}.nav-back:hover{color:var(--text);gap:.7rem}
+  .container{max-width:1000px;margin:0 auto;padding:8rem 2rem 4rem}
+  .project-header{margin-bottom:4rem}
+  .project-category{font-family:'Fira Code',monospace;font-size:.72rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+  .project-title{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(2.5rem,5vw,4rem);letter-spacing:-.025em;line-height:1.1;margin-bottom:1.5rem}
+  .project-subtitle{color:var(--muted);font-size:1.1rem;line-height:1.8;max-width:800px;margin-bottom:2rem}
+  .project-meta{display:flex;flex-wrap:wrap;gap:.8rem;margin-bottom:2rem}
+  .metric{font-size:.72rem;font-weight:600;padding:.4rem 1rem;border-radius:100px}
+  .metric-blue{background:rgba(29,78,216,.08);color:#1d4ed8;border:1px solid rgba(29,78,216,.2)}
+  .metric-green{background:rgba(21,128,61,.08);color:#15803d;border:1px solid rgba(21,128,61,.2)}
+  .metric-red{background:rgba(185,28,28,.08);color:#b91c1c;border:1px solid rgba(185,28,28,.2)}
+  [data-theme="dark"] .metric-blue{background:rgba(107,156,250,.1);color:#6b9cfa;border-color:rgba(107,156,250,.2)}
+  [data-theme="dark"] .metric-green{background:rgba(74,222,128,.1);color:#4ade80;border-color:rgba(74,222,128,.2)}
+  [data-theme="dark"] .metric-red{background:rgba(248,113,113,.1);color:#f87171;border-color:rgba(248,113,113,.2)}
+  .tech-stack{display:flex;flex-wrap:wrap;gap:.5rem}
+  .tag{font-size:.75rem;font-family:'Fira Code',monospace;padding:.3rem .8rem;border-radius:4px;background:var(--bg2);border:1px solid var(--border);color:var(--muted)}
+  .section{margin-bottom:4rem}
+  .section-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1.8rem;margin-bottom:1.5rem}
+  .section-content p{color:var(--muted);line-height:1.9;font-size:.95rem;margin-bottom:1.2rem}
+  .section-content strong{color:var(--text);font-weight:600}
+  .section-content ul{margin-left:1.5rem;color:var(--muted);line-height:1.9}
+  .section-content ul li{margin-bottom:.8rem}
+  .cta-section{text-align:center;padding:3rem 2rem;background:var(--bg2);border-radius:12px;margin-top:4rem}
+  .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2rem;border-radius:6px;font-size:.88rem;font-weight:600;text-decoration:none;transition:all .25s}
+  .btn-primary{background:var(--text);color:var(--bg);box-shadow:0 4px 20px var(--shadow)}.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px var(--shadow)}
+  .screenshots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1.5rem}
+  .screenshot-item{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 2px 12px var(--shadow);transition:all .3s}
+  .screenshot-item:hover{transform:translateY(-4px);box-shadow:0 12px 36px var(--shadow);border-color:var(--accent)}
+  .screenshot-item img{width:100%;display:block;transition:transform .4s}
+  .screenshot-item:hover img{transform:scale(1.03)}
+  .screenshot-caption{padding:.75rem 1rem;font-size:.78rem;color:var(--muted);line-height:1.5;border-top:1px solid var(--border)}
+  @media(max-width:900px){.screenshots-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:768px){nav{padding:1rem 1.5rem}.theme-toggle{right:1.5rem}.container{padding:6rem 1.5rem 3rem}.screenshots-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><div class="toggle-knob" id="toggleKnob">☀️</div></button>
+<nav><a href="index.html" class="nav-back">← Back to Portfolio</a></nav>
+
+<div class="container">
+  <div class="project-header">
+    <div class="project-category">07 / E-Governance · Middleware</div>
+    <h1 class="project-title">Sanchaar Setu</h1>
+    <p class="project-subtitle">Production-grade e-governance middleware enabling secure, tamper-evident communication between government departments with Kafka-based async messaging, hash-chained audit logs, PII scrubbing, and enterprise security controls.</p>
+    <div class="project-meta">
+      <span class="metric metric-green">Production-grade</span>
+      <span class="metric metric-blue">Tamper-evident logs</span>
+      <span class="metric metric-red">PII protection</span>
+    </div>
+    <div class="tech-stack">
+      <span class="tag">Python</span><span class="tag">Kafka</span><span class="tag">Docker</span><span class="tag">Redis</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span><span class="tag">JWT / RBAC</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Project Overview</h2>
+    <div class="section-content">
+      <p><strong>Sanchaar Setu</strong> ("Bridge of Communication") is an enterprise middleware platform designed for Indian e-governance infrastructure. It enables secure, reliable, and auditable communication between independent government departments — solving the critical challenge of data consistency and traceability across disparate systems.</p>
+      <p>Architected for a government summit submission, it incorporates high-reliability features like <strong>Kafka Dead Letter Queues</strong>, <strong>exponential backoff retry</strong>, and <strong>tamper-evident hash-chained audit logs</strong> to meet production-grade compliance requirements.</p>
+      <ul>
+        <li><strong>Kafka-Based Messaging:</strong> Asynchronous, fault-tolerant message delivery between departments with DLQ and retry mechanisms</li>
+        <li><strong>Hash-Chained Audit Logs:</strong> Tamper-evident logging using SHA-256 hash chains — any modification breaks the chain</li>
+        <li><strong>PII Scrubbing:</strong> Automatic redaction of Aadhaar, PAN, phone, and email from all log outputs</li>
+        <li><strong>RBAC Authorization:</strong> Role-based access control (Admin, Operator, Auditor) with JWT authentication</li>
+        <li><strong>Rate Limiting:</strong> Redis-backed sliding window rate limiting to prevent API abuse</li>
+        <li><strong>Two-Way Sync:</strong> Middleware propagates data changes and resolves conflicts between central portals and department systems</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Security & Compliance</h2>
+    <div class="section-content">
+      <ul>
+        <li><strong>Tamper-Evident Audit Trail:</strong> Every log entry is cryptographically linked via SHA-256 hash chains. Any modification is instantly detectable.</li>
+        <li><strong>PII Auto-Redaction:</strong> Regex-based scrubbing of sensitive data from all log output for data protection compliance.</li>
+        <li><strong>JWT Authentication:</strong> Stateless token-based auth with configurable expiry and role claims.</li>
+        <li><strong>Rate Limiting:</strong> Redis-backed sliding window algorithm protecting endpoints from abuse and DDoS.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Technical Implementation</h2>
+    <div class="section-content">
+      <ul>
+        <li><strong>FastAPI:</strong> High-performance async Python web framework for the API gateway</li>
+        <li><strong>Apache Kafka:</strong> Distributed event streaming for reliable inter-department messaging</li>
+        <li><strong>PostgreSQL:</strong> Persistent storage for audit logs, department data, and sync state</li>
+        <li><strong>Redis:</strong> In-memory caching for rate limiting and session management</li>
+        <li><strong>Docker Compose:</strong> Multi-container orchestration for all services</li>
+        <li><strong>Exponential Backoff:</strong> Intelligent retry logic with configurable max retries</li>
+        <li><strong>Dead Letter Queue:</strong> Failed messages routed to DLQ for manual review and reprocessing</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Screenshots</h2>
+    <div class="section-content">
+      <p>A walkthrough of the Sanchaar Setu platform interface — from real-time monitoring to tamper-evident audit trails.</p>
+    </div>
+    <div class="screenshots-grid">
+      <div class="screenshot-item">
+        <img src="assests/ss-sanchaarsetu-1.png" alt="Sanchaar Setu Dashboard" loading="lazy">
+        <div class="screenshot-caption">Dashboard — high-level metrics: Total Events, Success Rate, Active Conflicts &amp; Recent Propagation Events</div>
+      </div>
+      <div class="screenshot-item">
+        <img src="assests/ss-sanchaarsetu-2.png" alt="Live Event Feed" loading="lazy">
+        <div class="screenshot-caption">Live Event Feed — real-time table showing UBID, Type, Source, Destination, Latency &amp; Retry counts</div>
+      </div>
+      <div class="screenshot-item">
+        <img src="assests/ss-sanchaarsetu-3.png" alt="Conflict Resolver" loading="lazy">
+        <div class="screenshot-caption">Conflict Resolver — open/resolved conflict summaries with selectable policies (SWS Wins, Last-Write Wins)</div>
+      </div>
+      <div class="screenshot-item">
+        <img src="assests/ss-sanchaarsetu-4.png" alt="Schema Mappings" loading="lazy">
+        <div class="screenshot-caption">Schema Mappings — AI-powered semantic field mapping registry with confidence scores across department systems</div>
+      </div>
+      <div class="screenshot-item">
+        <img src="assests/ss-sanchaarsetu-5.png" alt="Audit Trail" loading="lazy">
+        <div class="screenshot-caption">Audit Trail — append-only, hash-chained tamper-evident log of all system events and outcomes</div>
+      </div>
+      <div class="screenshot-item">
+        <img src="assests/ss-sanchaarsetu-6.png" alt="Department Systems" loading="lazy">
+        <div class="screenshot-caption">Department Systems — Tier 1/2/3 external integrations (Webhook, Polling, Snapshot) with live connection status</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <a href="https://github.com/SagarAgarwal2" target="_blank" class="btn btn-primary">View Code on GitHub →</a>
+  </div>
+</div>
+
+<script>
+  const toggle=document.getElementById('themeToggle'),knob=document.getElementById('toggleKnob'),html=document.documentElement;
+  const saved=localStorage.getItem('sa-theme')||'light';html.setAttribute('data-theme',saved);knob.textContent=saved==='dark'?'🌙':'☀️';
+  toggle.addEventListener('click',()=>{const next=html.getAttribute('data-theme')==='dark'?'light':'dark';html.setAttribute('data-theme',next);knob.textContent=next==='dark'?'🌙':'☀️';localStorage.setItem('sa-theme',next);});
+</script>
+</body>
+</html>
